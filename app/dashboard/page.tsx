@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Header } from '@/components/layout/header'
+import { AppShell } from '@/components/layout/app-shell'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useWallet } from '@/features/auth/useWallet'
@@ -51,9 +51,8 @@ export default function DashboardPage() {
 
   if (!isConnected) {
     return (
-      <main className="min-h-screen bg-background">
-        <Header />
-        <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
+      <AppShell>
+        <div className="flex items-center justify-center min-h-[calc(100vh-128px)]">
           <Card>
             <CardContent className="pt-6">
               <p className="text-center text-muted-foreground">
@@ -62,15 +61,13 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </main>
+      </AppShell>
     )
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
-      <Header />
-
-      <section className="py-12 px-4 md:py-20">
+    <AppShell>
+      <section className="py-12 px-4 md:py-20 lg:px-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <motion.div
@@ -209,11 +206,10 @@ export default function DashboardPage() {
                           </span>
                           <span>{listing.bids} bids</span>
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              listing.status === 'Active'
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${listing.status === 'Active'
                                 ? 'bg-success/20 text-success'
                                 : 'bg-muted/20 text-muted-foreground'
-                            }`}
+                              }`}
                           >
                             {listing.status}
                           </span>
@@ -233,6 +229,6 @@ export default function DashboardPage() {
           </motion.div>
         </div>
       </section>
-    </main>
+    </AppShell>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Header } from '@/components/layout/header'
+import { AppShell } from '@/components/layout/app-shell'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -125,10 +125,8 @@ export default function MarketplacePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
-      <Header />
-
-      <section className="py-12 px-4 md:py-20">
+    <AppShell>
+      <section className="py-12 px-4 md:py-20 lg:px-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <motion.div
@@ -337,7 +335,7 @@ export default function MarketplacePage() {
           )}
         </div>
       </section>
-    </main>
+    </AppShell>
   )
 }
 

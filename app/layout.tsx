@@ -8,25 +8,12 @@ import { Toaster } from 'sonner'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'ZK Health Marketplace',
-  description: 'Privacy-first health data marketplace on Starknet with zero-knowledge proofs',
+  title: 'NexaVita - Private Health Data Marketplace',
+  description: 'Next-gen health nexus: Secure, private health data marketplace on Starknet.',
   generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icons: {
+    icon: '/favicon.png',
+    apple: '/logo.png',
   },
 }
 

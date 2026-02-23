@@ -44,8 +44,8 @@ export default function Home() {
               className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight"
               variants={fadeInUp}
             >
-              <span className="bg-gradient-to-r from-foreground via-accent to-cyan-400 bg-clip-text text-transparent">
-                Own Your Health Data Privately
+              <span className="bg-gradient-to-r from-foreground via-accent to-blue-500 bg-clip-text text-transparent italic">
+                NexaVita: Your Health, Your Wealth, Your Proof.
               </span>
             </motion.h1>
 
@@ -54,7 +54,7 @@ export default function Home() {
               className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto"
               variants={fadeInUp}
             >
-              Sell your health insights with zero-knowledge proofs. Your data stays encrypted, your privacy protected.
+              Next-gen decentralized data economy. Sell your health insights with ZK-STARKs. Your data stays on-device, your results stay private.
             </motion.p>
 
             {/* CTA Buttons */}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Header } from '@/components/layout/header'
+import { AppShell } from '@/components/layout/app-shell'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -55,9 +55,8 @@ export default function UploadPage() {
 
   if (!isConnected) {
     return (
-      <main className="min-h-screen bg-background">
-        <Header />
-        <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
+      <AppShell>
+        <div className="flex items-center justify-center min-h-[calc(100vh-128px)]">
           <Card>
             <CardContent className="pt-6">
               <p className="text-center text-muted-foreground">
@@ -66,7 +65,7 @@ export default function UploadPage() {
             </CardContent>
           </Card>
         </div>
-      </main>
+      </AppShell>
     )
   }
 
@@ -119,21 +118,18 @@ export default function UploadPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
-      <Header />
-
-      <section className="py-12 px-4 md:py-20">
+    <AppShell>
+      <section className="py-12 px-4 md:py-20 lg:px-8">
         <div className="max-w-3xl mx-auto">
           {/* Stepper */}
           <div className="flex items-center justify-between mb-12">
             {(['input', 'encrypt', 'review', 'confirm'] as Step[]).map((s, i) => (
               <div key={s} className="flex items-center flex-1">
                 <motion.div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
-                    ['input', 'encrypt', 'review', 'confirm'].indexOf(step) >= i
-                      ? 'bg-accent text-accent-foreground'
-                      : 'bg-card text-muted-foreground'
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${['input', 'encrypt', 'review', 'confirm'].indexOf(step) >= i
+                    ? 'bg-accent text-accent-foreground'
+                    : 'bg-card text-muted-foreground'
+                    }`}
                   whileHover={{ scale: 1.1 }}
                 >
                   {['input', 'encrypt', 'review', 'confirm'].indexOf(step) > i ? (
@@ -144,11 +140,10 @@ export default function UploadPage() {
                 </motion.div>
                 {i < 3 && (
                   <div
-                    className={`flex-1 h-1 mx-2 ${
-                      ['input', 'encrypt', 'review', 'confirm'].indexOf(step) > i
-                        ? 'bg-accent'
-                        : 'bg-card'
-                    }`}
+                    className={`flex-1 h-1 mx-2 ${['input', 'encrypt', 'review', 'confirm'].indexOf(step) > i
+                      ? 'bg-accent'
+                      : 'bg-card'
+                      }`}
                   />
                 )}
               </div>
@@ -237,80 +232,57 @@ export default function UploadPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <ProgressWithLabel
-                    label="Client-side Encryption"
-                    value={isLoading ? 33 : 100}
-                    isLoading={isLoading}
-                    sublabel="ElGamal homomorphic encryption"
-                  />
+                  {/* If not started yet, show Start button */}
+                  {!state.encrypted && !isLoading ? (
+                    <div className="space-y-6">
+                      <p className="text-sm text-muted-foreground">
+                        Click below to start the local encryption and ZK-STARK proof generation process.
+                      </p>
+                      <Button onClick={handleEncrypt} className="w-full bg-accent hover:bg-accent/90">
+                        Start Process
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      <ProgressWithLabel
+                        label="Client-side Encryption"
+                        value={isLoading ? 33 : 100}
+                        isLoading={isLoading && !state.encrypted}
+                        sublabel="ElGamal homomorphic encryption"
+                      />
 
-                  <ProgressWithLabel
-                    label="ZK-STARK Proof Generation"
-                    value={isLoading ? 66 : 100}
-                    isLoading={isLoading}
-                    sublabel="Verifying criteria without revealing values"
-                  />
+                      <ProgressWithLabel
+                        label="ZK-STARK Proof Generation"
+                        value={isLoading ? 66 : 100}
+                        isLoading={isLoading && !state.proof}
+                        sublabel="Verifying criteria without revealing values"
+                      />
 
-                  <ProgressWithLabel
-                    label="IPFS Upload"
-                    value={isLoading ? 90 : 100}
-                    isLoading={isLoading}
-                    sublabel="Uploading encrypted blob"
-                  />
+                      <ProgressWithLabel
+                        label="IPFS Upload"
+                        value={isLoading ? 90 : 100}
+                        isLoading={isLoading && !state.ipfsHash}
+                        sublabel="Uploading encrypted blob"
+                      />
 
-                  {!isLoading && (
-                    <Button
-                      onClick={() => setStep('review')}
-                      className="w-full bg-accent hover:bg-accent/90"
-                    >
-                      Review & Confirm
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
+                      {!isLoading && state.encrypted && (
+                        <Button
+                          onClick={() => setStep('review')}
+                          className="w-full bg-accent hover:bg-accent/90"
+                        >
+                          Review & Confirm
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      )}
+
+                      {isLoading && (
+                        <Button disabled className="w-full">
+                          Processing...
+                        </Button>
+                      )}
+                    </div>
                   )}
-                  {isLoading && (
-                    <Button disabled className="w-full">
-                      Processing...
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-
-          {/* Step: Encrypt (Actual) */}
-          {step === 'encrypt' && isLoading && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Encrypting and Proving</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <ProgressWithLabel
-                    label="Encryption"
-                    value={33}
-                    isLoading
-                    sublabel="Encrypting your data..."
-                  />
-                  <ProgressWithLabel
-                    label="ZK Proof"
-                    value={66}
-                    isLoading
-                    sublabel="Generating proof..."
-                  />
-                  <ProgressWithLabel
-                    label="IPFS Upload"
-                    value={90}
-                    isLoading
-                    sublabel="Uploading..."
-                  />
-                  <Button onClick={handleEncrypt} className="w-full bg-accent hover:bg-accent/90">
-                    Start Process
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
                 </CardContent>
               </Card>
             </motion.div>
@@ -427,7 +399,7 @@ export default function UploadPage() {
           )}
         </div>
       </section>
-    </main>
+    </AppShell>
   )
 }
 

@@ -1,11 +1,29 @@
 'use client'
 
 import React from 'react'
+import { sepolia } from '@starknet-react/chains'
+import {
+  StarknetConfig,
+  publicProvider,
+  argent,
+  braavos,
+  useInjectedConnectors,
+} from '@starknet-react/core'
 
-/**
- * Simple provider wrapper for Starknet functionality
- * Starknet integration will be added via direct RPC calls and utilities
- */
 export function StarknetProvider({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  const { connectors } = useInjectedConnectors({
+    recommended: [argent(), braavos()],
+    includeRecommended: 'onlyIfNoConnectors',
+    order: 'random',
+  })
+
+  return (
+    <StarknetConfig
+      chains={[sepolia]}
+      provider={publicProvider()}
+      connectors={connectors}
+    >
+      {children}
+    </StarknetConfig>
+  )
 }

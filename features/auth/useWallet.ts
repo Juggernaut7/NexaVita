@@ -1,31 +1,27 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
+import { useAccount, useConnect, useDisconnect } from '@starknet-react/core'
 
 /**
  * Custom hook for wallet management
  * Provides wallet connection utilities and state management
  */
 export function useWallet() {
-  const [address, setAddress] = useState<string | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
+  const { address, status, account, isConnected } = useAccount()
+  const { connect, connectors } = useConnect()
+  const { disconnect } = useDisconnect()
 
   const connectWallet = useCallback(async () => {
-    // Wallet connection logic
-    console.log('[v0] Wallet connection initiated')
-    try {
-      // Placeholder for actual wallet connection
-      setIsConnected(true)
-    } catch (error) {
-      console.error('[v0] Wallet connection failed:', error)
+    // Connect to the first available connector (usually what people want for quick connect)
+    if (connectors.length > 0) {
+      connect({ connector: connectors[0] })
     }
-  }, [])
+  }, [connect, connectors])
 
   const disconnectWallet = useCallback(() => {
-    setAddress(null)
-    setIsConnected(false)
-    console.log('[v0] Wallet disconnected')
-  }, [])
+    disconnect()
+  }, [disconnect])
 
   const getShortAddress = useCallback(() => {
     if (!address) return ''
@@ -33,12 +29,14 @@ export function useWallet() {
   }, [address])
 
   return {
-    account: null,
+    account,
     address,
     isConnected,
-    status: isConnected ? 'connected' : 'disconnected',
+    status,
     connectWallet,
     disconnectWallet,
     getShortAddress,
+    connectors,
+    connect
   }
 }

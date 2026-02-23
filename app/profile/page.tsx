@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Header } from '@/components/layout/header'
+import { AppShell } from '@/components/layout/app-shell'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
@@ -24,9 +24,8 @@ export default function ProfilePage() {
 
   if (!isConnected) {
     return (
-      <main className="min-h-screen bg-background">
-        <Header />
-        <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
+      <AppShell>
+        <div className="flex items-center justify-center min-h-[calc(100vh-128px)]">
           <Card>
             <CardContent className="pt-6">
               <p className="text-center text-muted-foreground">
@@ -35,7 +34,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </div>
-      </main>
+      </AppShell>
     )
   }
 
@@ -53,10 +52,8 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
-      <Header />
-
-      <section className="py-12 px-4 md:py-20">
+    <AppShell>
+      <section className="py-12 px-4 md:py-20 lg:px-8">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <motion.div
@@ -305,6 +302,6 @@ export default function ProfilePage() {
           </motion.div>
         </div>
       </section>
-    </main>
+    </AppShell>
   )
 }
