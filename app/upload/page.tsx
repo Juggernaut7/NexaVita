@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { AppShell } from '@/components/layout/app-shell'
 import { Button } from '@/components/ui/button'
@@ -31,6 +32,7 @@ interface UploadState {
 }
 
 export default function UploadPage() {
+  const router = useRouter()
   const { isConnected, address } = useWallet()
   const [step, setStep] = useState<Step>('input')
   const [isLoading, setIsLoading] = useState(false)
@@ -386,10 +388,17 @@ export default function UploadPage() {
                   </div>
 
                   <div className="flex gap-3">
-                    <Button variant="outline" className="flex-1" onClick={() => window.location.href = '/dashboard'}>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => router.push('/dashboard')}
+                    >
                       Go to Dashboard
                     </Button>
-                    <Button className="flex-1 bg-accent hover:bg-accent/90" onClick={() => window.location.href = '/marketplace'}>
+                    <Button
+                      className="flex-1 bg-accent hover:bg-accent/90"
+                      onClick={() => router.push('/marketplace')}
+                    >
                       Browse Marketplace
                     </Button>
                   </div>
@@ -401,12 +410,4 @@ export default function UploadPage() {
       </section>
     </AppShell>
   )
-}
-
-function getProofDescription(statement: any): string {
-  const parts = []
-  if (statement.heartRateMin) parts.push(`HR ${statement.heartRateMin}+ bpm`)
-  if (statement.stepsMin) parts.push(`${statement.stepsMin}+ steps`)
-  if (statement.sleepHoursMin) parts.push(`${statement.sleepHoursMin}+ hours sleep`)
-  return parts.join(' • ') || 'Standard health'
 }

@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react'
 import { useAccount, useConnect, useDisconnect } from '@starknet-react/core'
+import { toast } from 'sonner'
 
 /**
  * Custom hook for wallet management
@@ -13,9 +14,16 @@ export function useWallet() {
   const { disconnect } = useDisconnect()
 
   const connectWallet = useCallback(async () => {
-    // Connect to the first available connector (usually what people want for quick connect)
-    if (connectors.length > 0) {
-      connect({ connector: connectors[0] })
+    if (connectors.length === 0) {
+      toast.error('No Starknet wallet detected. Install Braavos or Argent X and refresh.')
+      return
+    }
+
+    try {
+      await connect({ connector: connectors[0] })
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error?.message || 'Failed to connect wallet')
     }
   }, [connect, connectors])
 

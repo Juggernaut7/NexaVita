@@ -12,16 +12,6 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
       <div className="flex items-center justify-between h-16 px-4 md:px-6">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <div className="w-10 h-10 relative">
-            <img src="/logo.png" alt="NexaVita Logo" className="object-contain" />
-          </div>
-          <span className="bg-gradient-to-r from-accent to-blue-400 bg-clip-text text-transparent italic">
-            NexaVita
-          </span>
-        </Link>
-
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/" label="Home" />

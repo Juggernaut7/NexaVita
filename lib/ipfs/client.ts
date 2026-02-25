@@ -6,27 +6,13 @@
 import { EncryptedBlob } from '@/lib/types'
 import { IPFS_GATEWAY } from '@/lib/constants'
 
-let ipfsClient: any = null
-
 /**
  * Initialize IPFS HTTP client
+ * For hackathon MVP we avoid bundling heavy IPFS clients in SSR
+ * and rely on simulated uploads + public gateways.
  */
 async function initIPFSClient() {
-  if (ipfsClient) return ipfsClient
-
-  try {
-    // Dynamic import to avoid issues in browser
-    const { create } = await import('ipfs-http-client')
-    ipfsClient = create({
-      host: 'ipfs.infura.io',
-      port: 5001,
-      protocol: 'https',
-    })
-    return ipfsClient
-  } catch (error) {
-    console.error('Failed to initialize IPFS client:', error)
-    return null
-  }
+  return null
 }
 
 /**

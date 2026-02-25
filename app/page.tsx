@@ -34,42 +34,98 @@ export default function Home() {
           <div className="absolute bottom-20 right-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl" />
 
           <motion.div
-            className="relative z-10 text-center space-y-8"
+            className="relative z-10 grid gap-12 md:grid-cols-2 items-center"
             variants={containerVariants}
             initial="initial"
             animate="animate"
           >
-            {/* Main Heading */}
-            <motion.h1
-              className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight"
-              variants={fadeInUp}
-            >
-              <span className="bg-gradient-to-r from-foreground via-accent to-blue-500 bg-clip-text text-transparent italic">
-                NexaVita: Your Health, Your Wealth, Your Proof.
-              </span>
-            </motion.h1>
+            {/* Copy */}
+            <div className="space-y-8 text-center md:text-left">
+              <motion.h1
+                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+                variants={fadeInUp}
+              >
+                <span className="bg-gradient-to-r from-foreground via-accent to-blue-500 bg-clip-text text-transparent italic">
+                  NexaVita: Own Your Health, Privately.
+                </span>
+              </motion.h1>
 
-            {/* Subheading */}
-            <motion.p
-              className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto"
-              variants={fadeInUp}
-            >
-              Next-gen decentralized data economy. Sell your health insights with ZK-STARKs. Your data stays on-device, your results stay private.
-            </motion.p>
+              <motion.p
+                className="text-lg md:text-xl text-muted-foreground max-w-3xl md:max-w-xl"
+                variants={fadeInUp}
+              >
+                Prove you&apos;re part of a high-activity, healthy cohort without exposing raw metrics.
+                ZK-STARKs, ElGamal encryption, and Starknet-powered sealed auctions, all in your browser.
+              </motion.p>
 
-            {/* CTA Buttons */}
-            <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" variants={fadeInUp}>
-              <Link href={isConnected ? '/upload' : '/'}>
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                  Get Started
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-              <Link href="/marketplace">
-                <Button size="lg" variant="outline">
-                  Browse Marketplace
-                </Button>
-              </Link>
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+                variants={fadeInUp}
+              >
+                <Link href="/upload">
+                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                    Start Upload
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+                <Link href="/marketplace">
+                  <Button size="lg" variant="outline">
+                    Explore Marketplace
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Visual / Illustration */}
+            <motion.div
+              className="relative h-[320px] md:h-[380px] rounded-3xl border border-white/10 bg-black/30 backdrop-blur-md shadow-xl overflow-hidden"
+              initial={{ opacity: 0, y: 40, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+            >
+              {/* Concentric rings (static illustration, no animation) */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full border border-accent/40" />
+                  <div className="absolute inset-3 rounded-full border border-blue-500/30" />
+                  <div className="relative z-10 w-28 h-28 rounded-3xl bg-primary/80 border border-white/10 flex flex-col items-center justify-center shadow-2xl">
+                    <Lock className="w-8 h-8 text-accent mb-2" />
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                      ZK-HEALTH COHORT
+                    </p>
+                    <p className="mt-1 text-xs font-semibold text-foreground">
+                      High Activity
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Metrics strip */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                <div className="grid grid-cols-3 gap-3 text-xs">
+                  <div className="rounded-2xl bg-white/5 border border-white/10 p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                      Heart Rate
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-foreground">80–100 bpm</p>
+                    <p className="mt-1 text-[10px] text-success">Proven privately</p>
+                  </div>
+                  <div className="rounded-2xl bg-white/5 border border-white/10 p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                      Daily Steps
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-foreground">&gt; 10,000</p>
+                    <p className="mt-1 text-[10px] text-success">Meets criteria</p>
+                  </div>
+                  <div className="rounded-2xl bg-white/5 border border-white/10 p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                      Sleep
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-foreground">7+ hrs</p>
+                    <p className="mt-1 text-[10px] text-accent">Cohort-only view</p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -261,7 +317,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <Link href={isConnected ? '/upload' : '/'}>
+            <Link href="/upload">
               <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground px-8">
                 Start Now
               </Button>
