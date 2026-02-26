@@ -6,6 +6,8 @@
 import { EncryptedBlob } from '@/lib/types'
 import { IPFS_GATEWAY } from '@/lib/constants'
 
+const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT
+
 /**
  * Initialize IPFS HTTP client
  * For hackathon MVP we avoid bundling heavy IPFS clients in SSR
@@ -21,17 +23,38 @@ async function initIPFSClient() {
  */
 export async function uploadEncryptedData(encrypted: EncryptedBlob): Promise<string> {
   try {
-    const client = await initIPFSClient()
-    
-    if (!client) {
-      // Fallback: use public gateway simulation
-      return simulateIPFSUpload(encrypted)
+    // Prefer real Pinata upload when JWT is configured
+    if (PINATA_JWT) {
+      const response = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${PINATA_JWT}`,
+        },
+        body: JSON.stringify({
+          pinataContent: encrypted,
+          pinataMetadata: {
+            name: 'nexavita-encrypted-health',
+            keyvalues: {
+              app: 'NexaVita',
+              type: 'encrypted-health-blob',
+            },
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Pinata upload failed: ${response.status}`)
+      }
+
+      const json = await response.json()
+      if (json?.IpfsHash) {
+        return json.IpfsHash as string
+      }
     }
 
-    const data = JSON.stringify(encrypted)
-    const result = await client.add(data)
-    
-    return result.path // Returns IPFS hash like "QmXxxx"
+    // Fallback: simulated IPFS hash
+    return simulateIPFSUpload(encrypted)
   } catch (error) {
     console.error('IPFS upload error:', error)
     // Fallback to simulated upload
