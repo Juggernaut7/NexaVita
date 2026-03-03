@@ -13,20 +13,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
         
-      - name: Create commit
+      - name: Create and push commit
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           
           # Update a timestamp file
           echo "Last updated: $(date)" > DAILY_COMMIT.txt
           
           git add DAILY_COMMIT.txt
-          git commit -m "chore: daily commit to maintain streak - $(date +'%Y-%m-%d')"
+          git commit -m "chore: daily commit to maintain streak - $(date +'%Y-%m-%d')" || echo "No changes to commit"
           
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          git push
+
